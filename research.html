@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Research Paper — Ecosphere</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --g1: #0a2e0f;
+      --g2: #0d3d15;
+      --g3: #145a20;
+      --g4: #1e7a2e;
+      --g5: #2ea84a;
+      --g6: #4ecb6a;
+      --g7: #7de89a;
+      --g8: #b2f5c3;
+      --gold: #c8f55a;
+      --cream: #f0fce4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--g1);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0.35;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: transform 0.1s;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--g6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.25s ease;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem 5rem;
+      background: linear-gradient(to bottom, rgba(10,46,15,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--g8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .bg { position: fixed; inset: 0; z-index: 0; }
+
+    .bg-grad {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(46,168,74,0.15) 0%, transparent 60%),
+        linear-gradient(160deg, #0a2e0f 0%, #0d3d15 50%, #0a2e0f 100%);
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(78,203,106,0.04) 1px, transparent 1px),
+        linear-gradient(0deg,  rgba(78,203,106,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10rem 2rem 6rem;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--g6);
+      border: 1px solid rgba(78,203,106,0.3);
+      padding: 0.6rem 1.8rem;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--g8);
+      max-width: 650px;
+      margin: 0 auto 4rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .btn-open {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--gold);
+      color: var(--g1);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 1.5rem 4rem;
+      border: none;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+
+    .btn-open:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(200,245,90,0.2);
+    }
+
+    .meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 6rem;
+      width: 100%;
+      max-width: 1000px;
+      animation: fadeUp 0.8s 0.8s ease both;
+    }
+
+    .meta-card {
+      flex: 1;
+      background: rgba(13,61,21,0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(78,203,106,0.1);
+      padding: 2.5rem 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .meta-card:hover {
+      background: var(--g3);
+      border-color: var(--g6);
+    }
+
+    .meta-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: var(--g5);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+    }
+
+    .meta-value span { color: var(--gold); }
+
+    .authors {
+      margin-top: 5rem;
+      animation: fadeUp 0.8s 1s ease both;
+    }
+
+    .authors-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 1.5rem;
+    }
+
+    .authors-list {
+      display: flex;
+      gap: 4rem;
+      justify-content: center;
+    }
+
+    .author {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--g7);
+      font-style: italic;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 3rem 5rem;
+      border-top: 1px solid rgba(78,203,106,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--g5);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--g6);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.5rem 2rem; }
+      .nav-links { display: none; }
+      .meta { flex-direction: column; }
+      .authors-list { gap: 1.5rem; flex-direction: column; }
+      footer { flex-direction: column; gap: 2rem; text-align: center; padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="bg">
+  <div class="bg-grad"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Ecosphere</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="research.html" class="active">Research Paper</a></li>
+  
+  </ul>
+</nav>
+
+<main>
+  <div class="tag">Ecosphere Research Division — 2024</div>
+
+  <h1>
+    Renewable & Alternative Energy
+    <em>Pathways to a Sustainable Future</em>
+  </h1>
+
+  <p class="subtitle">
+    A comprehensive research paper on clean energy transitions, environmental impact,
+    and the role of innovation in achieving global carbon neutrality.
+  </p>
+
+  <a href="https://docs.google.com/document/d/1Y0V_PIuoX2T5jbs7wS09iCtCwhOrEGrW/edit?usp=sharing" target="_blank" class="btn-open">
+    Open Research Paper →
+  </a>
+
+  
+
+  <div class="authors">
+    <div class="authors-label">Authors</div>
+    <div class="authors-list">
+      <span class="author">Khaled Twig</span>
+      <span class="author"> Marwan Elkholy</span>
+      <span class="author">Habiba Mosaed</span>
+      <span class="author">Jana Mostafa</span>
+
+    </div>
+  </div>
+</main>
+
+
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, .meta-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(3)';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.width = '40px';
+      ring.style.height = '40px';
+    });
+  });
+</script>
+</body>
+</html>

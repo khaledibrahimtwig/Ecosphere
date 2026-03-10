@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>About Us — Ecosphere</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --g1: #0a2e0f;
+      --g2: #0d3d15;
+      --g3: #145a20;
+      --g4: #1e7a2e;
+      --g5: #2ea84a;
+      --g6: #4ecb6a;
+      --g7: #7de89a;
+      --g8: #b2f5c3;
+      --gold: #c8f55a;
+      --cream: #f0fce4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--g1);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0.35;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: transform 0.1s;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--g6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.25s ease;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem;
+      background: linear-gradient(to bottom, rgba(10,46,15,0.98), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--g8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--g5);
+      color: var(--g7);
+      padding: 0.6rem 1.5rem;
+      cursor: none;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .nav-cta:hover {
+      background: var(--g4);
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--g1);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border: none;
+      cursor: none;
+      font-weight: 700;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.2);
+      transform: translateX(-100%);
+      transition: transform 0.4s;
+    }
+
+    .btn-primary:hover::after { transform: translateX(0); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--g7);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border: 1px solid rgba(78,203,106,0.4);
+      cursor: none;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .section { padding: 7rem 4rem; }
+
+    .section-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      flex: 0 0 40px;
+      height: 1px;
+      background: var(--g5);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 span { color: var(--g6); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-hero {
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(46,168,74,.15) 0%, transparent 60%),
+        linear-gradient(160deg, #0a2e0f 0%, #0d3d15 60%, #0a2e0f 100%);
+    }
+
+    .page-hero-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(78,203,106,.04) 1px, transparent 1px),
+        linear-gradient(0deg,  rgba(78,203,106,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .breadcrumb {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .breadcrumb a {
+      color: var(--g6);
+      text-decoration: none;
+    }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .page-hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .story-text p {
+      font-size: 1rem;
+      color: var(--g8);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline {
+      border-left: 2px solid rgba(78,203,106,.2);
+      padding-left: 2rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.6rem;
+      top: 0.3rem;
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    .timeline-year {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-item p {
+      font-size: 0.9rem;
+      color: var(--g7);
+      line-height: 1.7;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .team-card {
+      background: var(--g2);
+      border: 1px solid rgba(78,203,106,.1);
+      padding: 2.5rem 2rem;
+      transition: all 0.4s;
+    }
+
+    .team-card:hover {
+      background: var(--g3);
+      border-color: rgba(78,203,106,.3);
+      transform: translateY(-4px);
+    }
+
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--g3), var(--g4));
+      border-radius: 50%;
+      border: 2px solid rgba(78,203,106,.3);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+    }
+
+    .team-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .team-role {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: var(--g5);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .team-card p {
+      font-size: 0.9rem;
+      color: var(--g7);
+      line-height: 1.7;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 4rem;
+    }
+
+    .value-item {
+      background: var(--g2);
+      padding: 3rem;
+      border: 1px solid rgba(78,203,106,.1);
+    }
+
+    .value-num {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: rgba(78,203,106,.3);
+      margin-bottom: 1rem;
+    }
+
+    .value-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .value-item p {
+      font-size: 0.95rem;
+      color: var(--g7);
+      line-height: 1.8;
+    }
+
+    .site-footer {
+      background: var(--g1);
+      border-top: 1px solid rgba(78,203,106,.1);
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      color: var(--g6);
+      line-height: 1.8;
+      margin-top: 1rem;
+      max-width: 280px;
+    }
+
+    .site-footer h4 {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 1.5rem;
+    }
+
+    .site-footer ul { list-style: none; }
+    .site-footer ul li { margin-bottom: 0.8rem; }
+
+    .site-footer ul li a {
+      font-size: 0.9rem;
+      color: var(--g7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .site-footer ul li a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(78,203,106,.1);
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--g4);
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .page-hero { padding: 0 2rem 4rem; }
+      .story-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .team-grid { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .site-footer { grid-template-columns: 1fr 1fr; gap: 2rem; padding: 3rem 2rem; }
+      .footer-bottom { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Ecosphere</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    
+    <li><a href="research.html">Research Paper</a></li>
+  </ul>
+  
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-lines"></div>
+  <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; About</div>
+  <h1>We Believe <em>Change</em><br>Starts Today</h1>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="section-label reveal">Our Values</div>
+  <h2 class="reveal">What <span>Drives Us</span></h2>
+  <div class="values-grid">
+    <div class="value-item reveal">
+      <div class="value-num">01</div>
+      <h3>Transparency</h3>
+      <p>We believe trust is built through complete clarity — with our clients, partners, and the communities we serve. Every decision is grounded in real data and measurable impact.</p>
+    </div>
+    <div class="value-item reveal">
+      <div class="value-num">02</div>
+      <h3>Innovation</h3>
+      <p>We never settle for existing solutions. We invest 15% of revenues in R&D because we know that environmental challenges demand ideas yet to be born.</p>
+    </div>
+    <div class="value-item reveal">
+      <div class="value-num">03</div>
+      <h3>Accountability</h3>
+      <p>Every project we undertake has its environmental impact calculated with precision. We publish our real results and take full responsibility for the footprint of our operations.</p>
+    </div>
+    <div class="value-item reveal">
+      <div class="value-num">04</div>
+      <h3>Inclusion</h3>
+      <p>Clean energy must be accessible to everyone. We develop innovative financing models to make our solutions available from the smallest villages to the largest cities.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="section-label reveal">The Team</div>
+  <h2 class="reveal">The <span>Minds</span> Behind the Mission</h2>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-avatar">J</div>
+      <h3>Jana Mostafa</h3>
+      <div class="team-role">Researcher</div>
+    
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">M</div>
+      <h3>Marwn Elkholy</h3>
+      <div class="team-role">Graphic Designer</div>
+      
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">H</div>
+      <h3>Habiba Mosaed</h3>
+      <div class="team-role">Web Developer</div>
+    
+    </div>
+    
+    <div class="team-card reveal">
+      <div class="team-avatar">K</div>
+      <h3>Khaled Twig</h3>
+      <div class="team-role">Web Developer</div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <div class="nav-logo" style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold);">Ecosphere</div>
+    <p>We believe every decision today shapes tomorrow's environment. Together we build a more sustainable and beautiful planet.</p>
+  </div>
+  <div>
+    <h4>Navigation</h4>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="research.html">Research Paper</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Services</h4>
+    <ul>
+      <li><a href="services.html">Solar Energy</a></li>
+      <li><a href="services.html">Wind Power</a></li>
+      <li><a href="services.html">Energy Storage</a></li>
+      <li><a href="services.html">Consulting</a></li>
+    </ul>
+  </div>
+</footer>
+
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  document.querySelectorAll('a, button, .team-card, .value-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.borderColor = 'var(--gold)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'var(--g6)';
+    });
+  });
+</script>
+</body>
+</html>

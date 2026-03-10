@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Services — Ecosphere</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --g1: #0a2e0f;
+      --g2: #0d3d15;
+      --g3: #145a20;
+      --g4: #1e7a2e;
+      --g5: #2ea84a;
+      --g6: #4ecb6a;
+      --g7: #7de89a;
+      --g8: #b2f5c3;
+      --gold: #c8f55a;
+      --cream: #f0fce4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--g1);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+      line-height: 1.7;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: transform 0.1s;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--g6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.25s ease;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem 5rem;
+      background: linear-gradient(to bottom, rgba(10,46,15,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--g8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--g5);
+      color: var(--g7);
+      padding: 0.6rem 1.5rem;
+      cursor: none;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .nav-cta:hover {
+      background: var(--g4);
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .page-hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 5rem;
+      position: relative;
+    }
+
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 30% 60%, rgba(46,168,74,.15) 0%, transparent 60%),
+        var(--g1);
+      z-index: -1;
+    }
+
+    .breadcrumb {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 2rem;
+    }
+
+    .breadcrumb a {
+      color: var(--g6);
+      text-decoration: none;
+    }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .page-hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .section { padding: 10rem 5rem; }
+
+    .section-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--g5);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 50px;
+      height: 1px;
+      background: var(--g5);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      margin-bottom: 4rem;
+    }
+
+    h2 span { color: var(--g6); }
+
+    .services-full {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      background: rgba(13,61,21,0.4);
+      padding: 4.5rem 4rem;
+      border: 1px solid rgba(78,203,106,.1);
+      transition: all 0.4s;
+    }
+
+    .service-row:hover {
+      background: var(--g3);
+      transform: translateY(-5px);
+      border-color: var(--g6);
+    }
+
+    .service-row-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.5rem;
+      color: rgba(78,203,106,.15);
+      font-weight: 900;
+    }
+
+    .service-row-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+    }
+
+    .service-row-info p {
+      font-size: 1rem;
+      color: var(--g7);
+      max-width: 90%;
+    }
+
+    .service-row-details {
+      border-left: 1px solid rgba(78,203,106,.2);
+      padding-left: 4rem;
+    }
+
+    .service-feature {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: var(--g8);
+    }
+
+    .service-feature::before {
+      content: '→';
+      color: var(--gold);
+    }
+
+    .research-cta-box {
+      margin-top: 8rem;
+      background: linear-gradient(135deg, var(--g2), var(--g4));
+      padding: 6rem 4rem;
+      text-align: center;
+      border: 1px solid var(--gold);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .research-cta-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .research-cta-box h3 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .research-cta-box p {
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      color: var(--g8);
+    }
+
+    .btn-research {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: var(--gold);
+      color: var(--g1);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 1.5rem 3.5rem;
+      border: none;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-research:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(200,245,90,0.3);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+      margin-top: 5rem;
+    }
+
+    .process-step {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+    }
+
+    .step-num {
+      width: 70px;
+      height: 70px;
+      background: var(--g3);
+      border: 1px solid var(--g5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+    }
+
+    .process-step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .process-step p {
+      font-size: 0.9rem;
+      color: var(--g7);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.2, 1, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      padding: 4rem 5rem;
+      border-top: 1px solid rgba(78,203,106,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--g5);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--g6);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    @media (max-width: 900px) {
+      nav { padding: 2rem; }
+      .nav-links { display: none; }
+      .section { padding: 4rem 2rem; }
+      .page-hero { padding: 0 2rem; }
+      .service-row { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 2rem; }
+      .service-row-details { border-left: none; border-top: 1px solid rgba(78,203,106,0.1); padding: 2rem 0 0; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 2rem; flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Ecosphere</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html" class="active">Services</a></li>
+    <li><a href="research.html">Research Paper</a></li>
+  </ul>
+  
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Services</div>
+  <h1 class="reveal"><em>Integrated</em> Solutions<br>for Sustainable Energy</h1>
+</section>
+
+<section class="section">
+  <div class="section-label reveal">What We Offer</div>
+  <h2 class="reveal">Advanced Services for a <span>Greener Planet</span></h2>
+
+  <div class="services-full">
+    <div class="service-row reveal">
+      <div class="service-row-num">01</div>
+      <div class="service-row-info">
+        <h3>Solar Energy</h3>
+        <p>Advanced solar panel systems for residential and industrial projects. Precision-engineered to ensure maximum efficiency in all climates.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">23% Conversion Efficiency</div>
+        <div class="service-feature">25-Year Performance Guarantee</div>
+        <div class="service-feature">Smart Cloud Monitoring</div>
+      </div>
+    </div>
+
+    <div class="service-row reveal">
+      <div class="service-row-num">02</div>
+      <div class="service-row-info">
+        <h3>Wind Power</h3>
+        <p>Innovative turbines designed for low-wind environments. Near-silent operation with high-output durability.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">Active from 2 m/s Wind</div>
+        <div class="service-feature">Noise Levels &lt; 40 dB</div>
+        <div class="service-feature">Site Feasibility Analysis</div>
+      </div>
+    </div>
+
+    <div class="service-row reveal">
+      <div class="service-row-num">03</div>
+      <div class="service-row-info">
+        <h3>Hydropower</h3>
+        <p>Harnessing the force of water to generate clean, continuous energy. From small residential plants to large government-backed projects.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">Micro Plants from 5 kW</div>
+        <div class="service-feature">24/7 Continuous Supply</div>
+        <div class="service-feature">50+ Year Operational Life</div>
+      </div>
+    </div>
+
+    <div class="service-row reveal">
+      <div class="service-row-num">04</div>
+      <div class="service-row-info">
+        <h3>Energy Storage</h3>
+        <p>Next-generation batteries and smart storage systems ensuring uninterrupted supply for both grid-tied and off-grid configurations.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">LFP Battery Technology</div>
+        <div class="service-feature">6,000+ Charge Cycles</div>
+        <div class="service-feature">AI-Driven Management</div>
+      </div>
+    </div>
+
+    <div class="service-row reveal">
+      <div class="service-row-num">05</div>
+      <div class="service-row-info">
+        <h3>Environmental Consulting</h3>
+        <p>Expert assessments and tailored action plans to achieve carbon neutrality. We help you understand your footprint and reach your goals.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">Full Carbon Footprint Audit</div>
+        <div class="service-feature">5-Year Action Plan</div>
+        <div class="service-feature">ESG Investor Reports</div>
+      </div>
+    </div>
+
+    <div class="service-row reveal">
+      <div class="service-row-num">06</div>
+      <div class="service-row-info">
+        <h3>Smart Green Cities</h3>
+        <p>Designing and building sustainable cities powered 100% by renewable energy. Full adoption targeted by 2040.</p>
+      </div>
+      <div class="service-row-details">
+        <div class="service-feature">Sustainable Urban Design</div>
+        <div class="service-feature">Smart Grid Infrastructure</div>
+        <div class="service-feature">Government Partnerships</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="research-cta-box reveal">
+    <h3>Explore Our Deep <em>Research</em></h3>
+    <p>Want to see the data behind the revolution? Read our latest research paper on clean energy transitions across 15 nations.</p>
+    <a href="https://docs.google.com/document/d/1Y0V_PIuoX2T5jbs7wS09iCtCwhOrEGrW/edit?usp=sharing" target="_blank" class="btn-research">
+      Open Research Paper →
+    </a>
+  </div>
+</section>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 100);
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  document.querySelectorAll('a, button, .service-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.borderColor = 'var(--gold)';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'var(--g6)';
+      ring.style.width = '40px';
+      ring.style.height = '40px';
+    });
+  });
+</script>
+</body>
+</html>
